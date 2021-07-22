@@ -19,51 +19,50 @@ spec:
     spec:
       containers:
         - name: hello
-          image: gcr.io/vpnproject1-318209/appk8s@sha256:f7bc77885ccdbd7f47cca284a63701d56f70de47a0b1dec88c83bc1c0588ea7a:v1
+          image: gcr.io/vpnproject1-318209/appk8s@sha256:f7bc77885ccdbd7f47cca284a63701d56f70de47a0b1dec88c83bc1c0588ea7a
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
               name: nodejs
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: nodejs
   labels:
-    app: nginx
+    app: nodejs
 spec:
   replicas: 3
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: nginx
+      app: nodejs
   template:
     metadata:
       labels:
-        app: nginx
-        tier: nginx
+        app: nodejs
+        tier: nodejs
     spec:
       containers:
-        - name: nginx
-          image: gcr.io/vpnproject1-318209/nginxk8s@sha256:d85e0e3ab8218ff1dce6ec0b11cc65922f15a7ea9ddbeba13f7dd59b578fa281:v1
+        - name: hello
+          image: gcr.io/vpnproject1-318209/appk8s@sha256:f7bc77885ccdbd7f47cca284a63701d56f70de47a0b1dec88c83bc1c0588ea7a
           imagePullPolicy: Always
           ports:
-            - containerPort: 80
-              name: nginx
+            - containerPort: 5000
+              name: nodejs
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx
+  name: nodejs
   labels:
-    app: nginx
+    app: nodejs
 spec:
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: 5000
   selector:
-    app: nginx
-    tier: nginx
+    app: nodejs
+    tier: nodejs
   type: LoadBalancer
